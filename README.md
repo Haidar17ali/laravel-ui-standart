@@ -9,7 +9,7 @@ This repository is the shared UI reference for Laravel applications. It defines 
 1. Read [AGENTS.md](AGENTS.md) before changing UI in any Laravel project.
 2. Apply [Design Rules](docs/DESIGN-RULES.md).
 3. Follow the form, Select2, delete, and toast guidelines in [docs](docs/).
-4. Adapt examples to the dependencies and asset pipeline already installed in the target project.
+4. Follow [Hermes Integration](docs/HERMES-INTEGRATION.md) to make the standards available in each Laravel project.\n5. Adapt examples to the dependencies and asset pipeline already installed in the target project.
 
 ## Core interaction standards
 
