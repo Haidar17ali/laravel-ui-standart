@@ -18,6 +18,7 @@
                 aria-atomic="true"
                 data-bs-autohide="true"
                 data-bs-delay="{{ $config['delay'] }}"
+                style="--app-toast-duration: {{ $config['delay'] }}ms;"
             >
                 <div class="app-toast__icon" aria-hidden="true">{{ $config['icon'] }}</div>
 
@@ -34,6 +35,10 @@
                 >
                     <span aria-hidden="true">&times;</span>
                 </button>
+
+                <div class="app-toast__progress" aria-hidden="true">
+                    <div class="app-toast__progress-bar"></div>
+                </div>
             </div>
         @endif
     @endforeach
