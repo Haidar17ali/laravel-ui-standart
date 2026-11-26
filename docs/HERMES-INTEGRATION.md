@@ -73,3 +73,30 @@ In a Laravel project, ask Hermes to:
 5. Report what it could and could not verify.
 
 Do not make production code changes during this verification-only test.
+
+
+## Global Hermes instruction (all workspaces)
+
+To apply the live-read rule across projects, add this section to the global Hermes instruction file that is actually loaded by the running agent (the user's current setup has used `~/.hermes/SOUL.md`). Preserve the existing content; append this section rather than replacing the file:
+
+```md
+## Mandatory Laravel Standards — Live GitHub
+
+Whenever a task involves a Laravel project, regardless of its directory or whether it is a new or existing project:
+
+1. Before inspecting or editing project code, fetch and read the current standards from:
+   https://raw.githubusercontent.com/Haidar17ali/laravel-ui-standart/main/AGENTS.md
+   https://raw.githubusercontent.com/Haidar17ali/laravel-ui-standart/main/README.md
+   https://raw.githubusercontent.com/Haidar17ali/laravel-ui-standart/main/docs/CODING-STANDARD.md
+   https://raw.githubusercontent.com/Haidar17ali/laravel-ui-standart/main/docs/ROUTE-CONTROLLER-CRUD.md
+2. For UI work, also fetch the relevant design, form, Select2, delete, toast, and validation-checklist documents referenced by the shared AGENTS.md.
+3. Fetch directly from GitHub over HTTPS on every new Laravel task. Do not clone, pull, or maintain a local copy of this standards repository.
+4. If the fetch fails, retry once. If it still fails, stop before substantial changes and report the exact failure. Never claim the standards were read if they were not fetched.
+5. Inspect the target project's own instructions and architecture, apply the shared standards without breaking existing conventions, and run the relevant validation checklist before reporting completion.
+```
+
+This global instruction is the intended mechanism for applying the policy to all workspaces. A project-root `AGENTS.md` block is still useful as a second layer, but it is not a substitute for confirming that the running Hermes version actually loads the global instruction file.
+
+## Runtime integration verification
+
+After editing the global instruction file, restart/reload the Hermes process if its runtime only reads `SOUL.md` at startup. Then run a read-only test in two different Laravel project directories. Ask the agent to identify the current standards it fetched and review one CRUD route/controller/Blade flow without changing files. Confirm that it reports the live GitHub read and the correct route/model identity. Do not consider integration complete until this is verified in the actual running agent.
