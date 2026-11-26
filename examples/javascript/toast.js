@@ -20,6 +20,23 @@
         return container;
     };
 
+    const prepareToast = (toast) => {
+        if (toast.dataset.motionReady === 'true') return;
+        toast.dataset.motionReady = 'true';
+
+        toast.addEventListener('show.bs.toast', () => {
+            toast.classList.remove('app-toast-leaving');
+            toast.classList.add('app-toast-entering');
+        });
+
+        toast.addEventListener('hide.bs.toast', () => {
+            toast.classList.remove('app-toast-entering');
+            toast.classList.add('app-toast-leaving');
+        });
+
+        toast.addEventListener('hidden.bs.toast', () => toast.remove(), { once: true });
+    };
+
     window.showAppToast = (type, message, title) => {
         const config = typeConfig[type];
 
@@ -37,6 +54,7 @@
         toast.setAttribute('aria-atomic', 'true');
         toast.dataset.bsAutohide = 'true';
         toast.dataset.bsDelay = String(config.delay);
+        toast.style.setProperty('--app-toast-duration', `${config.delay}ms`);
 
         const icon = document.createElement('div');
         icon.className = 'app-toast__icon';
@@ -65,11 +83,19 @@
         closeText.textContent = '×';
         close.appendChild(closeText);
 
+        const progress = document.createElement('div');
+        progress.className = 'app-toast__progress';
+        progress.setAttribute('aria-hidden', 'true');
+
+        const progressBar = document.createElement('div');
+        progressBar.className = 'app-toast__progress-bar';
+        progress.appendChild(progressBar);
+
         content.append(heading, body);
-        toast.append(icon, content, close);
+        toast.append(icon, content, close, progress);
         getContainer().appendChild(toast);
 
-        toast.addEventListener('hidden.bs.toast', () => toast.remove(), { once: true });
+        prepareToast(toast);
         window.bootstrap.Toast.getOrCreateInstance(toast).show();
     };
 
@@ -80,8 +106,10 @@
         }
 
         document.querySelectorAll('.app-toast').forEach((element) => {
+            const delay = Number(element.dataset.bsDelay || 4000);
+            element.style.setProperty('--app-toast-duration', `${delay}ms`);
+            prepareToast(element);
             window.bootstrap.Toast.getOrCreateInstance(element).show();
-            element.addEventListener('hidden.bs.toast', () => element.remove(), { once: true });
         });
     });
 })();
